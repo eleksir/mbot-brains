@@ -14,12 +14,17 @@ unless (-d $braindir) {
 	die "Directory $braindir does not exists\n";
 }
 
+unless (-f "$braindir/lat.brain.sqlite") {
+	die "Famous latin phrases module is not initialized. Run bin/lat_init.pl\n";
+}
+
 my %brain;
 
 # just return answer
 sub answer (@) {
 	my $chat = shift;
 	my $phrase = shift;
+	my $msg;
 
 	unless (defined $brain{$chat}) {
 		my $brain = sprintf '%s/%s.brain.sqlite', $braindir, $chat;
@@ -30,7 +35,11 @@ sub answer (@) {
 		);
 	}
 
-	my $msg = $brain{$chat}->reply($phrase);
+	if ($chat eq 'lat') {
+		$msg = $brain{$chat}->reply();
+	} else {
+		$msg = $brain{$chat}->reply($phrase);
+	}
 
 	return ('200', 'text/plain', $msg);
 }
@@ -68,12 +77,18 @@ my $app = sub {
 		($status, $content, $msg) = answer ($env->{HTTP_CHAT}, $env->{HTTP_PHRASE});
 	}
 
+	if ($env->{PATH_INFO} eq '/lat' && $env->{REQUEST_METHOD} eq 'POST') {
+		($status, $content, $msg) = answer ('lat', undef);
+	}
+
 	return [
 		$status,
 		[ 'Content-Type' => $content, 'Content-Length' => length $msg ],
 		[ $msg ],
 	];
 };
+
+1;
 
 __END__
 # vim: set ft=perl noet ai ts=4 sw=4 sts=4:
