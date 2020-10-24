@@ -1,0 +1,5 @@
+[-Modules::RequireExplicitPackage]
+[-Modules::RequireVersionVar]
+[-CodeLayout::RequireTidyCode]
+[-ControlStructures::ProhibitUnlessBlocks]
+[-Subroutines::ProhibitSubroutinePrototypes]

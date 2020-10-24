@@ -1,0 +1,32 @@
+mbot-brains
+------------------------------------------------------------------------------
+
+What is it?
+------------------------------------------------------------------------------
+Sample PSGI service implementing markov chain chat module.
+
+
+What for?
+------------------------------------------------------------------------------
+For fun. And for MBot framework.
+
+
+How to run it?
+------------------------------------------------------------------------------
+First things you need - some modules from cpan or from your distro. See
+cpanfile. You can bootstrap required modules to vendor_perl dir with cpanm and
+bootstrap.sh script.
+
+To run this service you need application server capable to run PSGI apps.
+
+There are plenty of PSGI servers: uWSGI, Starman, Plack, Nginx UNIT, Twiggy,
+etc. I prefer uWSGI, but Starman can provide more insights for debugging.
+
+With uwsgi:
+/usr/bin/uwsgi --ini /path/to/uwsgi.ini --pidfile /path/to/pidile.pid \
+               --logto /path/to/uwsgi.log --psgi /path/to/mbot-brains.psgi \
+               --perl-local-lib /path/to/vendor_perl
+
+With Starman:
+PERl5LIB=/path/to/vendor_perl /path/to/starman --listen 127.0.0.1:3000 \
+               /path/to/mbot-brains.psgi
