@@ -69,6 +69,11 @@ my $app = sub {
 	my $status = '404';
 	my $content = 'text/plain';
 
+	if ($env->{PATH_INFO} eq '/ping') {
+		$msg = "pong\n";
+		$status '200';
+	}
+
 	if ($env->{PATH_INFO} eq '/learn' && $env->{REQUEST_METHOD} eq 'POST') {
 		($status, $content, $msg) = learn ($env->{HTTP_CHAT}, $env->{HTTP_PHRASE});
 	}
